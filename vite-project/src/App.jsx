@@ -6,7 +6,8 @@ import Menu from './Menu.jsx'
 function App() {
   const[nome, setNome] = useState('')
   const[email, setEmail] = useState('')
-  
+  const[codigo, setCodigo] = useState('')
+
   const alerta = () => {
     alert('Curioso emkkkkkkkk')
   }
@@ -17,16 +18,24 @@ function App() {
     console.log(email)
   }
 
-  const [user, setUser] = useState({})
+  const [user, setUser] = useState({
+    first_name: "",
+    last_name: "",
+    email: ""
+  })
   const getUser = () => {
-    fetch('https://reqres.in/api/users/4')
+    fetch(`https://reqres.in/api/users/${codigo}`)
     .then((resposta) => resposta.json())
-    .then((json) => setUser(json.data))
+    .then((json) => {
+      if(json.data){
+        setUser(json.data)
+      }
+    })
   }
 
   useEffect(() => {
-    getUser()
-  },[])
+    getUser(codigo)
+  },[codigo])
 
   return (
     <>
@@ -43,6 +52,7 @@ function App() {
       </form>
       <hr />
       <p>Exemplo</p>
+      <input type="text" onChange={(e) => {setCodigo(e.target.value)}}/>
       <p>Nome: {user.first_name} {user.last_name}</p>
       <p>Email: {user.email}</p>
     </>
